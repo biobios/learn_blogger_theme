@@ -7,9 +7,60 @@
 	  xmlns:expr='http://www.google.com/2005/gml/expr'>
 	<head>
 		<b:skin><![CDATA[]]></b:skin>
-		<b:defaultmarkups></b:defaultmarkups>
+		<b:defaultmarkups>
+			<b:defaultmarkup type='Blog'>
+				<b:includable id='main'>
+					<b:switch var='data:blog.pageType'>
+						<b:case value='item'/><!--投稿-->
+						<b:include name='item_page'/>
+						<b:case value='static_page'/><!--ページ-->
+						<b:include name='static_page'/>
+						<b:case value='error_page'/><!--エラーページ-->
+						<b:include name='error_page'/>
+						<b:case value='archive'/><!--アーカイブ-->
+						<b:include name='archive_page'/>
+						<b:case value='index'/>
+						<b:if cond='data:blog.searchQuery'><!--検索ページ-->
+							<b:include name='search_page'/>
+							<b:elseif cond='data:blog.searchLabel'/><!--ラベル別ページ-->
+							<b:include name='label_page'/>
+							<b:elseif cond='data:blog.url == data:blog.homepageUrl'/><!--ホームページ-->
+							<b:include name='home_page'/>
+						</b:if>
+					</b:switch>
+				</b:includable>
+				<b:includable id='item_page'></b:includable>
+				<b:includable id='static_page'></b:includable>
+				<b:includable id='error_page'></b:includable>
+				<b:includable id='archive_page'>
+					<b:include name='snippets_list'/>
+				</b:includable>
+				<b:includable id='search_page'>
+					<b:include name='snippets_list'/>
+				</b:includable>
+				<b:includable id='label_page'>
+					<b:include name='snippets_list'/>
+				</b:includable>
+				<b:includable id='home_page'>
+					<b:include name='snippets_list'/>
+				</b:includable>
+				<b:includable id='snippets_list'>
+					<b:loop values='data:posts' var='post'>
+						<article class='snippet'>
+							<header></header>
+							<section>
+								<data:post.body/>
+							</section>
+							<footer></footer>
+						</article>
+					</b:loop>
+				</b:includable>
+			</b:defaultmarkup>
+		</b:defaultmarkups>
 	</head>
 	<body>
-		<b:section id='メイン'></b:section>
+		<b:section id='メイン'>
+			<b:widget id='Blog1' locked='true' title='ブログの投稿' type='Blog' visible='true'></b:widget>
+		</b:section>
 	</body>
 </html>
